@@ -1,8 +1,8 @@
 import { BrandedString, PercNumber } from "./brands";
 import { ObjV2 } from "./vectors";
-export type Rect<TNum extends number> = {
-  width: TNum;
-  height: TNum;
+export type Rect<TWidth extends number, THeight extends TWidth = TWidth> = {
+  width: TWidth;
+  height: THeight;
 };
 
 // TODO - generic "Cartesian Product" operator for internally multiplying any given dimensional vector
@@ -15,11 +15,16 @@ type FixedAreaTag<TSum extends number> = { __areaProduct: TSum };
 type SummableObject = { size: number };
 type AreaableObject = { width: number; height: number };
 
+// TODO 'NestedFixedTag'? ie {fixes:{sum:TSum,height:THeight [...]}}
+// can be used to pin things down
+// "__brand" becomes the top-level discriminator,
+// ie if all the subBrands match - we can add a __brand to mark a qualitatively unique type
 type ArrayFixedSum<
   TSum extends number,
   TArray extends SummableObject[]
 > = TArray & FixedSumTag<TSum>;
 
+// TODO technically if we have ObjectFixedArea & either width or height, we can calc the other dimension - so really can be specified in terms of smth like "area & aspect ratio"
 export type ObjectFixedArea<
   TArea extends number,
   TObj extends AreaableObject
@@ -69,7 +74,18 @@ export type RectanglePartition = {
   partition: Partition;
 };
 
-type NestedTile = Tile & { children: TileSummary };
-type PotentiallyNestedTile = Tile | NestedTile;
+// type TreeNode<TNode> =
+export type Tree<TNode> = TNode & { children: null | TNode };
+// type TreeNode<TNode> = TNode | (TNode & { children: TileSummary });
+// export type Tree<TNode> = TreeNode<TNode>[];
 
-export type TileTree = ArrayFixedSum<1, PotentiallyNestedTile[]>;
+// the root element in our tree has an area of 1 - doesnt consider nested values
+// export type TileTree = ArrayFixedSum<1, Tree<Tile>>;
+export type TileTree = any;
+
+export type RectFixedArea<TArea extends number> = ObjectFixedArea<
+  TArea,
+  Rect<number>
+>;
+export type RectArea1 = RectFixedArea<1>;
+export type RectIn1x1Box = Rect<PercNumber>;

@@ -1,6 +1,11 @@
-export * from "./affine";
-export * from "./brands";
-export * from "./color";
-export * from "./rectanglePartition";
-export * from "./simplicialComplex";
-export * from "./spaceTransforms";
+export type * from "./affine";
+export type * from "./brands";
+export type * from "./color";
+export type * from "./networks";
+export type * from "./orderedEvents";
+export type * from "./rectanglePartition";
+export type * from "./simplicialComplex";
+export type * from "./spaceTransforms";
+export type * from "./vectors";
+
+export type { APlusB } from "type-algebra/src";

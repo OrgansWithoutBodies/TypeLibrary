@@ -1,9 +1,4 @@
-export type BrandTag<TBrand extends string> = { __brand: TBrand };
-export type BrandedType<TType, TBrand extends string> = TType &
-  BrandTag<TBrand>;
-
-export type BrandedNumber<TBrand extends string> = BrandedType<number, TBrand>;
-export type BrandedString<TBrand extends string> = BrandedType<string, TBrand>;
+import { ArrV2 } from "../vectors";
 
 export type NumberInRangeTagExclusive<
   TMin extends number,
@@ -15,6 +10,7 @@ export type NumberInRangeExclusive<
   TMax extends number
 > = number & NumberInRangeTagExclusive<TMin, TMax>;
 
+// TODO when tmin/tmax = number these just become number - ie 0 becomes valid
 // min exclusive, max inclusive
 export type NumberInRangeExclusiveInclusive<
   TMin extends number,
@@ -38,14 +34,14 @@ export type NumberInRangeInclusive<
   TMax extends number
 > = IncludeExclusiveEndpoints<NumberInRangeExclusive<TMin, TMax>, TMin, TMax>;
 
-export type NonZeroPositiveNumber<TNum extends number> = NumberInRangeExclusive<
-  0,
-  TNum
->;
-export type NonZeroNegativeNumber<TNum extends number> = NumberInRangeExclusive<
-  TNum,
-  0
->;
+export type NonZeroPositiveNumber<TNum extends number> =
+  | NumberInRangeExclusive<0, TNum>
+  // add prototypical nonzero positive number too
+  | 1;
+export type NonZeroNegativeNumber<TNum extends number> =
+  | NumberInRangeExclusive<TNum, 0>
+  // add prototypical nonzero negative number too
+  | -1;
 
 export type NonZeroNumber =
   | NonZeroNegativeNumber<number>
@@ -67,12 +63,27 @@ export type NonNegativeNumber<TNum extends number> = NumberInRangeInclusive<
 export type PercNumber = NumberInRangeInclusive<0, 1>;
 export type ExclusivePercNumber = NumberInRangeExclusive<0, 1>;
 
-export type NottableTag<TNot extends boolean> = { __not: TNot };
+export type FixedProductTag<TNum extends number> = { __fixedProduct: TNum };
+export type FixedSumTag<TNum extends number> = { __fixedSum: TNum };
+export type FixedRatioTag<TNum extends number> = { __fixedSum: TNum };
 
-export type Not<TNot extends boolean> = TNot extends true
-  ? NottableTag<false>
-  : NottableTag<true>;
+export type IsOrderedTag = { __ordered: true };
+// isNonEqual means none of the elements of the list this gets attached to are equal
+export type IsNonEqualTag = { __nonEqual: true };
 
-// function notTest<TNot extends boolean>(val:number & NottableTag<TNot>):Not<TNot>{return !val}
+export type OrderedList<TNum extends number> = TNum[] & IsOrderedTag;
+export type OrderedListExclusive<TNum extends number> = OrderedList<TNum> &
+  IsNonEqualTag;
 
-// TODO move what's still useful, deprecate rest
+export type NonEqualPair<TNum extends number> = ArrV2<TNum> & IsNonEqualTag;
+export type OrderedPair<TNum extends number> = ArrV2<TNum> & IsOrderedTag;
+export type OrderedPairExclusive<TNum extends number> = NonEqualPair<TNum> &
+  OrderedPair<TNum>;
+
+export type NaN = number & { __isNaN: true };
+export type NaNaN = number & { __isNaN: false };
+
+export type Infinity = number & { __isInfinity: true };
+export type Finity = number & { __isInfinity: false };
+
+// TODO might be useful to have some notion of exponentiation factor? allows us to distinguish between both factors of 10 (ie digits) & factors of 2 (ie byte-able objects)
