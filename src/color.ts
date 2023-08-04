@@ -1,4 +1,4 @@
-// import { NumbersFrom0ToN } from "type-algebra/src";
+// import { NumbersFrom0ToN } from "type-algebra";
 import { NumberInRangeInclusive } from "./brands";
 
 export type Channel = "R" | "G" | "B" | "A";

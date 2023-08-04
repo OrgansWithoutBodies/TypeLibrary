@@ -8,4 +8,4 @@ export type * from "./simplicialComplex";
 export type * from "./spaceTransforms";
 export type * from "./vectors";
 
-export type { APlusB } from "type-algebra/src";
+export type { APlusB } from "type-algebra";
