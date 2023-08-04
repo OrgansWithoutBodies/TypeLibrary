@@ -1,4 +1,4 @@
-import { ArrV } from "type-algebra";
+import { ArrV } from "type-algebra/src";
 export type ObjV1<TNum extends number = number> = { x: TNum };
 export type ObjV2<TNum extends number = number> = { x: TNum; y: TNum };
 export type ObjV3<TNum extends number = number> = { x: TNum; y: TNum; z: TNum };

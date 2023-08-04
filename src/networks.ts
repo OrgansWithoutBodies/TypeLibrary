@@ -1,4 +1,4 @@
-import { RangeTag } from "type-algebra";
+import { RangeTag } from "type-algebra/src";
 import { BrandedNumber } from "./brands";
 import { HexString } from "./color";
 import { SpaceTransformationTag } from "./spaceTransforms";
